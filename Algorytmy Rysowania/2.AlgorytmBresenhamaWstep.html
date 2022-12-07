@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style> body { background-color:#ccc; } </style>
+</head>
+<body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.js"></script>
+    <script type="text/javascript">
+        function setup() {
+            createCanvas(512,512);
+            background(255);
+            pixelDensity(1);
+        }
+
+        // 4 zmienne początku i końca linii
+        var x0=-1;
+        var y0=-1;
+        var x1=-1;
+        var y1=-1;
+
+        // umożliwienie użytkownikowi wybrać początek
+        function mousePressed() {
+            x0=mouseX;
+            y0=mouseY;
+        }
+
+        // w trakcie przesuwania myszki zaznaczają się początek i koniec linii,
+        // odpowiednio na czerwono i zielono
+        function mouseDragged() {
+            x1=mouseX;
+            y1=mouseY;
+            background(255);
+            noStroke();
+            fill('red');
+            ellipse(x0-3,y0-3,6);
+            fill('green');
+            ellipse(x1-3,y1-3,6);
+        }
+
+        // po odpuszczeniu klawisza kasowanie ekranu i uruchomienie odpowiedniego algorytmu rysowania linii
+        function mouseReleased() {
+            background(255);
+            loadPixels();
+            draw_line();
+            updatePixels();
+        }
+
+        // zamalowanie pixeli w odpowiednich kolorach
+        // red: negative values
+        // 
+        function set_pixel(x, y, c) {
+            idx = (y * 512 + x) * 4;
+            // channel red: negative
+            pixels[idx] = -c;
+            // channel green: stays c
+            pixels[idx + 1] = c;
+            // channel blue: 0
+            pixels[idx + 2] = 0;
+            pixels[idx + 3] = 255;
+        }
+
+        function draw_line() {
+            dx = x1 - x0;
+            dy = y1 - y0;
+
+            y = 0;
+            while (y < 512) {
+                x = 0;
+                while (x < 512) {
+                    // Algorytm Bresenhama
+                    // green - positive values
+                    // red - negative values
+                    // value HSV (intensywność) - odległość piksela od prostej leżącej na wybranej linii
+                    // black - piksele leżące dokładnie na linii
+                    // interesuje nas czy piksel jest powyżej czy poniżej linii
+                    Dxy = dy / dx * (x - x0) - (y - y0);
+
+                    // mnożymy przez dowolną wartość stałą
+                    // tutaj 2dx
+                    //Dxy = 2 * dy * (x - x0) - 2 * dx * (y - y0);
+                    set_pixel(x, y, Dxy);
+                    x++;
+                }
+                y++;
+            }
+        }
+
+    </script>
+    <a href="."><button>&#x2190; back </button></a></br></br>
+</body>
+</html>

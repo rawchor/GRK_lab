@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<p style="line-height: 18px; font-size: 18px;  font-family: times,monospace;">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    <script type="text/javascript">
+        function preload() {
+            //img=loadImage("https://raw.githubusercontent.com/scikit-image/scikit-image/master/skimage/data/astronaut.png");
+            img=loadImage("../Barwy i Histogram/img/astronaut.png");
+        }
+        function setup() {
+            createCanvas(256,256);
+            // załadowanie do mapy szarości
+            img.filter('gray');
+            img.loadPixels();
+
+            var histogram = new Array(256);
+            histogram.fill(0);
+
+            for (x = 0; x < img.width; x++) {
+                for (y = 0; y < img.height; y++) {
+                    pos = 4 * (y * img.width + x);
+                    // załadowanie poszczególnych wartości do tablicy
+                    histogram[img.pixels[pos]]++;
+                }
+            }
+
+            // kasowanie całego obrazu
+            background(256, 256, 256);
+
+            // kolor czarny
+            stroke(0, 0, 0);
+
+            max = Math.max.apply(Math, histogram);
+            for (i = 0; i < 256; i++) {
+                // odpowiednie wyskalowanie
+                // max -> maksymalna wartość tablicy
+                // pomnożenie przez wysokość canvasa 256
+                // * 10 aby przeskalować wartość
+                h = histogram[i] / max * 256 * 10;
+                // x1 Number: the x-coordinate of the first point
+                // y1 Number: the y-coordinate of the first point
+                // x2 Number: the x-coordinate of the second point
+                // y2 Number: the y-coordinate of the second point
+                line(i, 256, i, 256 - h);
+            }
+            
+            // updatePixels();
+            //image(img, 0, 0);
+        }
+    </script>
+    <a href="../MP2_Barwy_i_histogram"><button>&#x2190; back </button></a></br></br>
+</body>
+</html>

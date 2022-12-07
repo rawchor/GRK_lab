@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style> body { background-color:#ccc; } </style>
+</head>
+<body>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/p5.js"></script>
+    <script type="text/javascript">
+        function setup() {
+            pixelDensity(1);
+            createCanvas(512,512);
+            background(255);
+        }
+
+        // 4 zmienne początku i końca linii
+        var x0=-1;
+        var y0=-1;
+        var x1=-1;
+        var y1=-1;
+
+        // umożliwienie użytkownikowi wybrać początek
+        function mousePressed() {
+            x0=mouseX;
+            y0=mouseY;
+        }
+
+        // w trakcie przesuwania myszki zaznaczają się początek i koniec linii,
+        // odpowiednio na czerwono i zielono
+        function mouseDragged() {
+            x1=mouseX;
+            y1=mouseY;
+            background(255);
+            noStroke();
+            // kolo poczatek
+            fill('red');
+            ellipse(x0-3,y0-3,6);
+            // kolo koniec
+            fill('green');
+            ellipse(x1-3,y1-3,6);
+        }
+
+        // po odpuszczeniu klawisza kasowanie ekranu i uruchomienie odpowiedniego algorytmu rysowania linii
+        function mouseReleased() {
+            background(255);
+            loadPixels();
+            draw_line();
+            updatePixels();
+        }
+
+        // zamalowanie pixeli w odpowiednich kolorach szarosci
+        function set_pixel(x, y, c) {
+            idx=(y * 512 + x) * 4;
+            pixels[idx] = c;
+            pixels[idx + 1] = c;
+            pixels[idx + 2] = c;
+            pixels[idx + 3] = 255;
+        }
+
+        function draw_line() {
+            dx = x1 - x0;
+            dy = y1 - y0;
+            a = dy / dx;
+            b = y0 - a * x0;
+
+            // przypisanie x do punktu początkowego 
+            // x = x0;
+            // // rysujemy do punktu końcowego
+            // while (x < x1) {
+            //     // Algorytm rysowania linii: ax+b
+            //     // zamalowanie tych pixeli na kolor czarny
+            //     set_pixel(x, Math.round(a * x + b), 0);
+            //     x++;
+            // }
+
+            for (x = x0; x < x1; x++) {
+                // Algorytm rysowania linii: ax+b
+                // zamalowanie tych pixeli na kolor czarny
+                set_pixel(x, Math.round(a * x + b), 0);
+                x++;
+            }
+            // Conclusion: 
+            // draws only from 0 - 180 deg
+        }    
+
+    </script>
+    <a href="."><button>&#x2190; back </button></a></br></br>
+</body>
+</html>

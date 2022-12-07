@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<p style="line-height: 18px; font-size: 18px;  font-family: times,monospace;">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    <script>
+
+        function setup() {
+            createCanvas(800, 600);
+            noLoop();
+        }
+
+        function draw() {
+            // sky
+            background(135, 206, 250);
+
+            // grass
+            var grass = color(0, 100, 0);
+            for (y = 400; y < height; y++) {
+                for (x = 0; x < width; x++) {
+                    set(x, y, grass);
+                }
+            }
+
+            // flowers
+            for (i = 0; i < 1000; i++) {
+                var rand_x = floor(random(0, width));
+                var rand_y = floor(random(400, height));
+                set(rand_x, rand_y, color(random(0, 255)))
+            }
+
+            // walls
+            var walls = color(139, 69, 19);
+            for (y = 200; y < 400; y++) {
+                for (x = 200; x < width - 200; x++) {
+                    set(x, y, walls);
+                }
+            }
+
+            // door
+            var door = color(220, 220, 220);
+            for (y = 250; y < 400; y++) {
+                for (x = 360; x < width - 360; x++) {
+                    set(x, y, door);
+                }
+            }
+
+            // windows
+            var windows = color(220, 220, 220);
+            for (y = 250; y < 320; y++) {
+                for (x = 250; x < 320; x++) {
+                    set(x, y, windows);
+                }
+
+                for (x = 480; x < 550; x++) {
+                    set(x, y, windows);
+                }
+            }
+
+            // roof
+            var roof = color(250, 128, 114);
+            
+            var x1 = 400;
+            var x2 = 400;
+            for (y = 50; y < 200; y++) {
+                for (x = x1; x < x2; x++) {
+                    set(x, y, roof);
+                }
+                x1 -= 2;
+                x2 += 2;
+            }
+            updatePixels();
+        }
+    </script>
+    <a href="."><button>&#x2190; back </button></a></br></br>
+</p>
+</body>
+</html>
